@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" );
+*{
+  margin:  0;
+  padding: 0;
+}
+
+.navbar{
+  font-family: "poppins",sans-serif;
+  font-size: 15px;
+  line-height: 26px;
+  box-shadow: 0 8px 6px -6px grey;
+}
+.navbar-brand{
+  font-weight: bold;
+  margin-left: 10px;
+}
+.fa-cart-shopping{
+  font-size: larger;
+}
+.dropdown-toggle{
+  font-family: "poppins",sans-serif;
+}
+.nav-item:hover,.dropdown-toggle:hover{
+        text-decoration: underline;
+       
+}
+
