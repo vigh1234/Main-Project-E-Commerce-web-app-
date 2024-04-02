@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./../Components/Layout/Layout";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {Checkbox,Radio} from 'antd'
 import { Prices } from "../Components/Prices";
+import { useCart } from "../context/Cart";
+import {toast} from 'react-hot-toast'
+import { useAuth } from "../context/auth";
+import './HomePage.css'
+
 
 
 function Homepage() {
   const navigate = useNavigate();
+  const [auth,setAuth]=useAuth()
+  const [cart,setCart]=useCart()
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -106,18 +113,19 @@ function Homepage() {
   }
   return (
         <Layout title={'Shop Now'}>
+          <div className="banner"></div>
           <div className='row mt-3'>
-            <div className='col-md-3'>
+            <div className='col-md-2'>
               <div className='text-center'>
-                <h4>Filter By Category</h4>
-                <div className='d-flex flex-column'>
+                <h5 className=" filter-category">Filter By Category</h5>
+                <div className='d-flex flex-column mb-3'>
                 {categories?.map(c=>(
-                  <Checkbox key={c._id} onChange={(e)=>handleFilter(e.target.checked, c._id)}>
+                  <Checkbox className="ms-4" key={c._id} onChange={(e)=>handleFilter(e.target.checked, c._id)}>
                     {c.name}
                   </Checkbox>
                 ))}
                 </div>
-                <h4>Filter By Price</h4>
+                <h5 className="filter-price">Filter By Price</h5>
                 <div className='d-flex flex-column mt-2'>
                     <Radio.Group onChange={e => setRadio(e.target.value)}>
                       {Prices?.map(p=>(
@@ -132,29 +140,34 @@ function Homepage() {
                 </div>
               </div>
             </div>
-            <div className='col-md-9'>
-              <h2 className='text-center'>Products</h2>
+            <div className='col-md-10'>
+              <h2 className='text-center mt-3'>Our Latest Collections</h2>
               <div className='d-flex flex-wrap'>
               {products?.map((p) => (
-                        <div className='card m-2' style={{width: '18rem'}}>
-                        <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} width={'30px'} height={'250px'}/>
-                        <div className="card-body">
-                            <h5 className="card-title">{p.name}</h5>
+                        <div className='card m-3 product-card' style={{width: '18rem'}}>
+                        <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} width={'10px'} height={'180px'}/>
+                        <div className="card-body product-details">
+                            <h6 className="card-title">{p.name}</h6>
                             <p className="card-text">{p.description.substring(0,30)}</p>
-                            <p className="card-text">${p.price}</p>
-                            <button className='btn btn-primary me-2'>More Details</button>
-                            <button className='btn btn-secondary me-2'>Add to Cart</button>
+                            <p className="card-text product-price">${p.price}</p>
+                            <button className='btn btn-primary btn-sm me-1' onClick={()=>navigate(`/product/${p.name}`)}>More Details</button>
+                            <button className="btn btn-secondary btn-sm "
+                            onClick={() =>{setCart([...cart, p]);
+                              localStorage.setItem('cart',JSON.stringify([...cart,p]))
+                            toast.success('Item added to cart'); }}>Add to Cart</button>
                         </div>
-                    </div>     
+                    </div>  
                 ))}
+                <span className=" mt-3"><Link to={'/categories'}><button className="btn btn-sm btn-warning ldmrebtn ms-4">Load More..</button></Link></span> 
+                {/* <button className="btn btn-warning"><Link to={'/categories'}>Load More</Link></button> */}
               </div>
-              <div className="m-2 p-3">
+              {/* <div className="m-2 p-3">
                 {products && products.length <total && (
                   <button className="btn btn-warning" onClick={(e)=>{e.preventDefault(); setPage(page+1)}}>
                     {loading ? 'Loading' : 'load more'}
                   </button>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </Layout>  

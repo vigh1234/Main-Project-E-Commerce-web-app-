@@ -17,7 +17,10 @@ function UpdateProduct() {
     const [shipping, setShipping] = useState("");
     const [photo, setPhoto] = useState("");
     const [id,setId]=useState('')
+    const [priceError,setPriceError] =useState('')
+    const [quantityError,setQuantityError] =useState('')
     const navigate=useNavigate()
+
     //get single product
     const getSingleProduct = async () => {
         try {
@@ -41,7 +44,7 @@ function UpdateProduct() {
     //get category
     const getAllCategory = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8080/api/v1/category/get-category");
+        const { data } =await axios.get("http://localhost:8080/api/v1/category/get-category");
         if (data?.success) {
           setCategories(data?.category);
         }
@@ -54,28 +57,35 @@ function UpdateProduct() {
       getAllCategory();
     }, []);
   
-    //create product
+    //update product
     const handleUpdate = async (e) => {
-      e.preventDefault();
-      try {
-        const productData = new FormData();
-        productData.append("name", name);
-        productData.append("description", description);
-        productData.append("price", price);
-        productData.append("quantity", quantity);
-        photo && productData.append("photo", photo);
-        productData.append("category", category);
-        const { data } = axios.put(`http://localhost:8080/api/v1/product/update-product/${id}`, productData);
-        if (data?.success) {
-          toast.error(data?.message);
-        } else {
-          navigate("/dashboard/admin/products");
-        }
-      } catch (error) {
-        console.log(error);
+      e.preventDefault()
+ 
+     try {
+       const productData = new FormData();
+       productData.append("name", name);
+       productData.append("description", description);
+       productData.append("price", price);
+       productData.append("quantity", quantity);
+       productData.append("photo", photo);
+       productData.append("category", category);
+       const { data } =await axios.put(`http://localhost:8080/api/v1/product/update-product/${id}`,productData);
+       
+       if (data?.success) {
+        navigate("/dashboard/admin/products");
+     
+       } else {
+        console.log(error) 
+       }
+     } catch (error){
+      if(price <=0){
+        setPriceError('Price must be a positive value')
       }
-    };
-
+      if(quantity <=0){
+        setQuantityError('Quantity must be a positive value')
+      }
+     }
+   };
     //delete product
     const handleDelete=async()=>{
         try {
@@ -142,12 +152,14 @@ function UpdateProduct() {
                   type="number" value={price} placeholder="Price"
                   className="form-control" onChange={(e) => setPrice(e.target.value)}
                 />
+                <div style={{color:'red'}}>{priceError}</div>
               </div>
               <div className="mb-3 w-75">
                 <input
                   type="number" value={quantity} placeholder="Quantity"
                   className="form-control" onChange={(e) => setQuantity(e.target.value)}
                 />
+                 <div style={{color:'red'}}>{quantityError}</div>
               </div>
               <div className="mb-3 w-75">
                 <Select

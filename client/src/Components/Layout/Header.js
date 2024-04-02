@@ -1,12 +1,19 @@
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/auth'
 import './Header.css'
 import SearchInput from '../form/SearchInput'
+import UseCategory from '../../hooks/useCategory'
+import { useCart } from '../../context/Cart'
+import {Badge} from 'antd'
+
+
 
 
 function Header() {
   const [auth,setAuth]=useAuth()
+  const [cart] =useCart()
+  const categories = UseCategory()
   const handleLogout=() =>{
     setAuth({
       ...auth,
@@ -29,18 +36,39 @@ function Header() {
               <li className="nav-item">
                 <Link to='/' className="nav-link active text-dark me-3" aria-current="page" >Home</Link>
               </li>
-              <li className="nav-item">
-                <Link to='/category' className="nav-link text-dark me-3" >Categories</Link>
+              <li className="nav-item dropdown ">
+                <Link
+                  className="nav-link dropdown-toggle text-dark"
+                  to={"/categories"}
+                  data-bs-toggle="dropdown"
+                >
+                  Categories
+                </Link>
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link className="dropdown-item" to={"/categories"}>
+                      All Categories
+                    </Link>
+                  </li>
+                  {categories?.map((c) => (
+                    <li>
+                      <Link
+                        className="dropdown-item"
+                        to={`/category/${c.name}`}
+                      >
+                        {c.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </li>
+                
               {
                 !auth.user ? (<> <div class="dropdown">
                 <button class="btn  dropdown-toggle" type="button"  data-bs-toggle="dropdown">Account</button>
                 <ul class="dropdown-menu" >
                   <li><Link to='/login' class="dropdown-item" >Login</Link></li>
                   <li><Link to='/register' class="dropdown-item" >Register</Link></li>
-                  
-                  
-                  {/* <li><Link to={`/dashboard/${auth?.user?.role === 1 ? 'admin' :'user'}`} class="dropdown-item" >Dashboard</Link></li> */}
                 </ul>
               </div></>) : (<><div class="dropdown">
                 <button class="btn  dropdown-toggle" type="button"  data-bs-toggle="dropdown">{auth?.user?.name}</button>
@@ -50,10 +78,12 @@ function Header() {
                 </ul>
               </div></>)
               }
-             
-              <li className="nav-item">
-                <Link to='/cart' className="nav-link text-dark me-3"><i class="fa-sharp fa-solid fa-cart-shopping"></i></Link>
-              </li>
+             {!auth.user ? (<> <Link to='/cartnotfound' className="nav-link text-dark me-3"><i class="fa-sharp fa-solid fa-cart-shopping"></i></Link></>)
+              : (<><li className="nav-item">
+                <Badge count={cart?.length} showZero>
+                  <Link to='/cart' className="nav-link text-dark me-3"><i class="fa-sharp fa-solid fa-cart-shopping"></i></Link>
+                </Badge> 
+              </li></>)}
             </ul>
           </div>
         </div>

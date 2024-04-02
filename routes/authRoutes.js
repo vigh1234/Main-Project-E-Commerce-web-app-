@@ -1,5 +1,5 @@
 const express=require('express')
-const {registerController,loginController,testController} =require('../controllers/authController')
+const {registerController,loginController,testController, updateProfileController, getOrderController, getAllOrdersController, orderStatusController} =require('../controllers/authController')
 const {isAdmin,requireSignIn}=require('../middleWares/authMidddleware')
 
 
@@ -20,5 +20,18 @@ router.get('/user-auth',requireSignIn,(req,res)=>{
 router.get('/admin-auth',requireSignIn,isAdmin,(req,res)=>{
     res.status(200).send({ok:true})
 })
+
+//update profile
+router.put('/profile', requireSignIn, updateProfileController)
+
+//orders
+router.get('/orders', requireSignIn, getOrderController)
+
+//all orders
+router.get("/all-orders", requireSignIn, isAdmin, getAllOrdersController);
+
+// order status update
+router.put("/order-status/:orderId",requireSignIn,isAdmin,orderStatusController);
+  
 
 module.exports=router

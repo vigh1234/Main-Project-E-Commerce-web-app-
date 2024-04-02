@@ -31,16 +31,17 @@ function Products() {
             </div>
             <div className='col-md-9 '>
                 <h1 className='text-center'>All Product List</h1>
-                <div className='d-flex'>
+                <div className='d-flex flex-wrap'>
                 {products?.map((p) => (
                     <Link to={`/dashboard/admin/product/${p.name}`} className='product-link'>
-                        <div className='card ms-5' style={{width: '15rem'}}>
+                         <div className='card custom-card-width' style={{width: '16rem'}}>
                         <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} width={'40px'} height={'200px'}/>
-                        <div className="card-body">
-                            <h5 className="card-title">{p.name}</h5>
-                            <p className="card-text">{p.description}</p>
+                        <div className="card-body bg-dark">
+                            <h5 className="card-title text-white">{p.name}</h5>
+                            <p className="card-text text-white">{p.description}</p>
                         </div>
-                    </div>     
+                    </div> 
+                      
                     </Link>    
                 ))}
                 </div>   

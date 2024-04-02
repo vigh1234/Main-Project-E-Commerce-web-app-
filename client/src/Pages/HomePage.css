@@ -1,0 +1,31 @@
+.banner{
+    background-image: url('../images/download.jfif');
+    background-size: cover;
+    height: 500px;
+    width: 100%;
+}
+.filter-category{
+    margin-top: 100px;
+}
+.product-card{
+    max-width: 225px;
+    box-shadow: 2px 2px 4px rgb(49, 49, 49);
+    height: 340px;
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(213, 213, 213),white);
+}
+
+.product-details{
+    margin-top: -10px;
+}
+.card-text{
+    font-size:medium;
+    margin-top: -5px;
+}
+.product-price{
+    color: black;
+    font-weight: bold;
+}
+.ldmrebtn{
+    margin-top: 295px;
+}

@@ -1,0 +1,14 @@
+.searchbtn{
+    width: 120px;
+    color: white;
+    height: 32px;
+    background-color: rgb(55, 54, 54);
+}
+.searchbtn:hover{
+    color: white;
+}
+
+.searchbr{
+    height: 32px;
+    border-color: rgb(76, 75, 75);
+}

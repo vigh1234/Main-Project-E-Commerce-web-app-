@@ -2,3 +2,13 @@
     text-decoration: none;
     color: black !important;
 }
+.custom-card-width{
+    max-width: 220px;
+    height: 290px;
+    margin-left: 10px;
+    margin-bottom: 30px;
+}
+
+body{
+    background: linear-gradient(to right rgb(93, 93, 93), white);
+}

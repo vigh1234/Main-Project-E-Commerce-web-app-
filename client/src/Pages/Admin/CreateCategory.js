@@ -11,7 +11,12 @@ function CreateCategory() {
   const [visible,setVisible]=useState(false)
   const [selected,setSelected]=useState(null)
   const [updatedName,setUpdatedName]=useState('')
+  const [error,setError]=useState('')
+
   const handleSubmit=async(e)=>{
+      if(name==''){
+        setError('Please Enter Category Name')
+      }
       e.preventDefault()
       try {
         const {data}=await axios.post('http://localhost:8080/api/v1/category/create-category',{name})
@@ -43,6 +48,14 @@ function CreateCategory() {
     getAllCategory();
   }, []);
 
+  useEffect(()=>{
+    if(error){
+      setTimeout(()=>{
+        setError('')
+    },2000)
+    }
+    return ()=>clearTimeout(setTimeout)
+  },[error])
 
   //update category
   const handleUpdate=async(e)=>{
@@ -89,6 +102,8 @@ function CreateCategory() {
                 <div className='col-md-9'>
                 <h1>Manage Category</h1>
                 <div className='p-3 w-50'>
+                  <div className='mb-2' style={{color:"red"}}>{error}</div>
+                  
                   <CategoryForm handleSubmit={handleSubmit} value={name} setValue={setName}/>
                 </div>
                 <div className='w-75 ms-5'>

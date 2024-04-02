@@ -15,7 +15,10 @@ function CreateProduct() {
   const [quantity, setQuantity] = useState("");
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
-  const navigate=useNavigate()
+  const [error, setError] = useState("");
+  const [priceError,setPriceError] =useState('')
+  const [quantityError,setQuantityError] =useState('')
+  const navigate = useNavigate()
 
   //get category
   const getAllCategory = async () => {
@@ -35,7 +38,8 @@ function CreateProduct() {
 
   //create product
   const handleCreate = async (e) => {
-    e.preventDefault();
+     e.preventDefault()
+
     try {
       const productData = new FormData();
       productData.append("name", name);
@@ -44,16 +48,56 @@ function CreateProduct() {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = axios.post("http://localhost:8080/api/v1/product/create-product", productData);
+      const { data } =await axios.post("http://localhost:8080/api/v1/product/create-product",productData);
+      
       if (data?.success) {
-        toast.error(data?.message);
-      } else {
         navigate("/dashboard/admin/products");
+      } else {
+       console.log(error)
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error){
+      if(!name || !description || !price  || !quantity || !photo || !category){
+        setError('All fields Required')
+      }
+      if(price <=0){
+        setPriceError('Price must be a positive value')
+      }
+      if(quantity <=0){
+        setQuantityError('Quantity must be a positive value')
+      }
+      if(!price){
+        setPriceError('')
+      }
+
+      if(!quantity){
+        setQuantityError('')
+      }
+     
     }
   };
+  useEffect(()=>{
+    if(error){
+      setTimeout(()=>{
+         setError('')
+      },4000)
+    }
+  },[error])
+  useEffect(()=>{
+    if(priceError){
+     setTimeout(()=>{
+        setPriceError('')
+     },4000)
+    }
+  },[priceError])
+
+  useEffect(()=>{
+    if(quantityError){
+      setTimeout(()=>{
+        setQuantityError('')
+      },4000)
+    }
+  },[quantityError])
+
 
 
   return (
@@ -104,12 +148,14 @@ function CreateProduct() {
                   type="number" value={price} placeholder="Price"
                   className="form-control" onChange={(e) => setPrice(e.target.value)}
                 />
+                <div style={{color:'red'}}>{priceError}</div>
               </div>
               <div className="mb-3 w-75">
                 <input
                   type="number" value={quantity} placeholder="Quantity"
                   className="form-control" onChange={(e) => setQuantity(e.target.value)}
                 />
+                <div style={{color:'red'}}>{quantityError}</div>
               </div>
               <div className="mb-3 w-75">
                 <Select
@@ -119,6 +165,7 @@ function CreateProduct() {
                   <Option value="1">Yes</Option>
                 </Select>
               </div>
+              <div className='mb-3' style={{color:"red"}}>{error}</div>
               <div className='mb-3'>
                 <button className='btn btn-primary' onClick={handleCreate}>create Product</button>
               </div>

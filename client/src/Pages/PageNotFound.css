@@ -1,0 +1,27 @@
+.pageNotfound{
+    font-family: "poppins",sans-serif;
+    font-size: 15px;
+    line-height: 26px;
+    box-shadow: 0 8px 6px -6px grey;
+    height: 63px;
+}
+
+.pageNotfoundHeader{
+    margin-top: 96px;
+}
+
+.footer2{
+    margin-top: 35vh;
+}
+.bold{
+    font-weight: bolder;
+}
+.pnf-btn{
+    background-color: rgb(72, 112, 173);
+    height: 40px;
+    width: 150px;
+    color: white;
+}
+.pnf-btn:hover{
+    color: white;
+}
